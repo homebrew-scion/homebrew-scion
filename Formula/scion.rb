@@ -6,22 +6,22 @@ class Scion < Formula
 
   on_macos do
     on_intel do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v#{version}/scion-darwin-amd64.tar.gz"
+      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-darwin-amd64.tar.gz"
       sha256 "0000000000000000000000000000000000000000000000000000000000000000"
     end
     on_arm do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v#{version}/scion-darwin-arm64.tar.gz"
+      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-darwin-arm64.tar.gz"
       sha256 "0000000000000000000000000000000000000000000000000000000000000000"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v#{version}/scion-linux-amd64.tar.gz"
+      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-linux-amd64.tar.gz"
       sha256 "0000000000000000000000000000000000000000000000000000000000000000"
     end
     on_arm do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v#{version}/scion-linux-arm64.tar.gz"
+      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-linux-arm64.tar.gz"
       sha256 "0000000000000000000000000000000000000000000000000000000000000000"
     end
   end
