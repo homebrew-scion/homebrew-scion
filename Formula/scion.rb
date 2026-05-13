@@ -30,6 +30,38 @@ class Scion < Formula
     bin.install "scion"
   end
 
+  def post_install
+    # Warn if no container runtime is available
+    has_runtime = system("which", "docker", out: :close, err: :close) ||
+                  system("which", "podman", out: :close, err: :close)
+    unless has_runtime
+      opoo "No container runtime found. Install Docker Desktop or Podman before running agents.\n" \
+           "  Docker:  https://www.docker.com/products/docker-desktop/\n" \
+           "  Podman:  https://podman.io/"
+    end
+
+    # Seed ~/.scion/ with default config and the community registry (ghcr.io/homebrew-scion).
+    # Safe to run on reinstall/upgrade — skips files that already exist.
+    system "#{bin}/scion", "init", "--machine", "--non-interactive"
+  end
+
+  def caveats
+    <<~EOS
+      Scion machine config has been seeded in ~/.scion/ with the community
+      registry (ghcr.io/homebrew-scion) pre-configured.
+
+      To start using Scion in a project:
+        cd your-project
+        scion init
+        scion server start
+
+      To use a different container registry:
+        scion init --machine --image-registry ghcr.io/your-org --force
+
+      Documentation: https://github.com/GoogleCloudPlatform/scion
+    EOS
+  end
+
   test do
     assert_match version.to_s, shell_output("#{bin}/scion version")
   end
