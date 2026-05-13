@@ -50,10 +50,11 @@ class Scion < Formula
       Scion machine config has been seeded in ~/.scion/ with the community
       registry (ghcr.io/homebrew-scion) pre-configured.
 
-      To start using Scion in a project:
+      To start using Scion:
+        scion server start          # start the hub
         cd your-project
-        scion init
-        scion server start
+        scion init                  # initialize project
+        scion start my-agent "..."  # launch an agent
 
       To use a different container registry:
         scion init --machine --image-registry ghcr.io/your-org --force
