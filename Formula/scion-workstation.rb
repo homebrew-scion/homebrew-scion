@@ -9,6 +9,15 @@ class ScionWorkstation < Formula
 
   conflicts_with "scion", because: "both install a 'scion' binary"
 
+  # Stop any running scion server before install or upgrade so ports are free.
+  def pre_install
+    if (old_bin = HOMEBREW_PREFIX/"bin/scion").exist?
+      system old_bin, "server", "stop", out: :close, err: :close
+    end
+  rescue
+    nil
+  end
+
   def install
     # Build the web frontend first — Go embeds web/dist/client/ at compile time.
     # Without this step the binary has no web UI and scion server start fails.
@@ -26,13 +35,6 @@ class ScionWorkstation < Formula
            "./cmd/scion"
   end
 
-  # Stop the running daemon before uninstall so ports are freed for a reinstall.
-  def pre_uninstall
-    system bin/"scion", "server", "stop", out: :close, err: :close
-  rescue
-    nil
-  end
-
   def post_install
     has_runtime = system("which", "docker", out: :close, err: :close) ||
                   system("which", "podman", out: :close, err: :close)
@@ -44,25 +46,26 @@ class ScionWorkstation < Formula
 
     unless system bin/"scion", "init", "--machine", "--non-interactive",
                               "--image-registry", "ghcr.io/homebrew-scion"
-      opoo "scion init --machine failed. Run manually after install:\n" \
+      opoo "scion init --machine failed. Run manually:\n" \
            "  scion init --machine --non-interactive --image-registry ghcr.io/homebrew-scion"
     end
   end
 
   def caveats
     <<~EOS
-      This is an experimental build from the workstation-improvements branch.
-      It is NOT the stable release — use 'scion' for production.
+      Scion has been installed. To start the server and open the onboarding wizard:
 
-      To start Scion and open the onboarding wizard:
         scion server start
 
       To upgrade to the latest commit on the branch:
         brew reinstall --HEAD homebrew-scion/scion/scion-workstation
 
       To reset and reinstall cleanly:
-        scion server stop || true
-        brew uninstall scion-workstation && rm -rf ~/.scion
+        brew reinstall --HEAD homebrew-scion/scion/scion-workstation
+        (the formula stops the server automatically before reinstalling)
+
+      Or for a full wipe:
+        scion server stop; brew uninstall scion-workstation; rm -rf ~/.scion
         brew install --HEAD homebrew-scion/scion/scion-workstation
 
       To switch back to the stable release:
