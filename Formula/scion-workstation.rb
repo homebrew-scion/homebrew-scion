@@ -5,10 +5,16 @@ class ScionWorkstation < Formula
   head "https://github.com/ptone/scion.git", branch: "workstation-improvements"
 
   depends_on "go" => :build
+  depends_on "node" => :build
 
   conflicts_with "scion", because: "both install a 'scion' binary"
 
   def install
+    # Build the web frontend first — Go embeds web/dist/client/ at compile time.
+    # Without this step the binary has no web UI and scion server start fails.
+    system "npm", "install", "--prefix", "web"
+    system "npm", "run", "build", "--prefix", "web"
+
     registry = "ghcr.io/homebrew-scion"
     ldflags = %W[
       -s -w
@@ -29,7 +35,11 @@ class ScionWorkstation < Formula
            "  Podman:  https://podman.io/"
     end
 
-    system "#{bin}/scion", "init", "--machine", "--non-interactive"
+    unless system bin/"scion", "init", "--machine", "--non-interactive",
+                              "--image-registry", "ghcr.io/homebrew-scion"
+      opoo "scion init --machine failed. Run manually after install:\n" \
+           "  scion init --machine --non-interactive --image-registry ghcr.io/homebrew-scion"
+    end
   end
 
   def caveats
@@ -37,11 +47,15 @@ class ScionWorkstation < Formula
       This is an experimental build from the workstation-improvements branch.
       It is NOT the stable release — use 'scion' for production.
 
-      To install:
-        brew install --HEAD homebrew-scion/scion/scion-workstation
+      To start Scion and open the onboarding wizard:
+        scion server start
 
       To upgrade to the latest commit on the branch:
         brew reinstall --HEAD homebrew-scion/scion/scion-workstation
+
+      To reset and reinstall cleanly:
+        brew uninstall scion-workstation && rm -rf ~/.scion
+        brew install --HEAD homebrew-scion/scion/scion-workstation
 
       To switch back to the stable release:
         brew uninstall scion-workstation
