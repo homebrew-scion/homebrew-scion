@@ -26,6 +26,13 @@ class ScionWorkstation < Formula
            "./cmd/scion"
   end
 
+  # Stop the running daemon before uninstall so ports are freed for a reinstall.
+  def pre_uninstall
+    system bin/"scion", "server", "stop", out: :close, err: :close
+  rescue
+    nil
+  end
+
   def post_install
     has_runtime = system("which", "docker", out: :close, err: :close) ||
                   system("which", "podman", out: :close, err: :close)
@@ -54,6 +61,7 @@ class ScionWorkstation < Formula
         brew reinstall --HEAD homebrew-scion/scion/scion-workstation
 
       To reset and reinstall cleanly:
+        scion server stop || true
         brew uninstall scion-workstation && rm -rf ~/.scion
         brew install --HEAD homebrew-scion/scion/scion-workstation
 
