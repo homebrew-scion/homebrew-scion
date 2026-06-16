@@ -1,5 +1,5 @@
 class Scion < Formula
-  desc "Multi-agent orchestration platform"
+  desc "Multi-agent orchestration platform with browser-based onboarding wizard"
   homepage "https://github.com/GoogleCloudPlatform/scion"
   version "0.1.0"
   license "Apache-2.0"
@@ -26,12 +26,20 @@ class Scion < Formula
     end
   end
 
+  # Stop any running scion server before install or upgrade so ports are free.
+  def pre_install
+    if (old_bin = HOMEBREW_PREFIX/"bin/scion").exist?
+      system old_bin, "server", "stop", out: :close, err: :close
+    end
+  rescue
+    nil
+  end
+
   def install
     bin.install "scion"
   end
 
   def post_install
-    # Warn if no container runtime is available
     has_runtime = system("which", "docker", out: :close, err: :close) ||
                   system("which", "podman", out: :close, err: :close)
     unless has_runtime
@@ -40,21 +48,22 @@ class Scion < Formula
            "  Podman:  https://podman.io/"
     end
 
-    # Seed ~/.scion/ with default config and the community registry (ghcr.io/homebrew-scion).
-    # Safe to run on reinstall/upgrade — skips files that already exist.
-    system "#{bin}/scion", "init", "--machine", "--non-interactive"
+    unless system bin/"scion", "init", "--machine", "--non-interactive",
+                              "--image-registry", "ghcr.io/homebrew-scion"
+      opoo "scion init --machine failed. Run manually:\n" \
+           "  scion init --machine --non-interactive --image-registry ghcr.io/homebrew-scion"
+    end
   end
 
   def caveats
     <<~EOS
-      Scion machine config has been seeded in ~/.scion/ with the community
-      registry (ghcr.io/homebrew-scion) pre-configured.
+      Scion has been installed. To get started, run:
 
-      To start using Scion:
-        scion server start          # start the hub
-        cd your-project
-        scion init                  # initialize project
-        scion start my-agent "..."  # launch an agent
+        scion server start
+
+      This starts the hub and opens the browser to the onboarding wizard,
+      which guides you through runtime setup, harness selection, image pulling,
+      and creating your first workspace.
 
       To use a different container registry:
         scion init --machine --image-registry ghcr.io/your-org --force
