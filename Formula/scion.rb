@@ -47,6 +47,16 @@ class Scion < Formula
            "  Docker:  https://www.docker.com/products/docker-desktop/\n" \
            "  Podman:  https://podman.io/"
     end
+
+    # Pre-detect runtime and write settings.yaml. This prevents apple-container from
+    # being auto-detected at server startup (which causes a crash on macOS due to
+    # authorization requirements). The onboarding wizard still runs via the SPA's
+    # client-side status check.
+    unless system bin/"scion", "init", "--machine", "--non-interactive",
+                              "--image-registry", "ghcr.io/homebrew-scion"
+      opoo "scion init --machine failed. Run manually:\n" \
+           "  scion init --machine --non-interactive --image-registry ghcr.io/homebrew-scion"
+    end
   end
 
   def caveats
