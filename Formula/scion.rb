@@ -47,12 +47,6 @@ class Scion < Formula
            "  Docker:  https://www.docker.com/products/docker-desktop/\n" \
            "  Podman:  https://podman.io/"
     end
-
-    unless system bin/"scion", "init", "--machine", "--non-interactive",
-                              "--image-registry", "ghcr.io/homebrew-scion"
-      opoo "scion init --machine failed. Run manually:\n" \
-           "  scion init --machine --non-interactive --image-registry ghcr.io/homebrew-scion"
-    end
   end
 
   def caveats
