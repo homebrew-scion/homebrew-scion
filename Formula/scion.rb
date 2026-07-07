@@ -1,28 +1,28 @@
 class Scion < Formula
   desc "Multi-agent orchestration platform with browser-based onboarding wizard"
   homepage "https://github.com/GoogleCloudPlatform/scion"
-  version "0.2.1"
+  version "0.2.2"
   license "Apache-2.0"
 
   on_macos do
     on_intel do
       url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-darwin-amd64.tar.gz"
-      sha256 "c9ef4eeb127f0304971dd572bdcdb7ef6a419caddf6f8a0afd722664333f57b3"
+      sha256 "8daca642b436e3bd251cbaeedca04a51d36b7c311e0646b7dd00e9a49f2555fc"
     end
     on_arm do
       url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-darwin-arm64.tar.gz"
-      sha256 "4dd174ab2a92d02cc0adaa8de4f48b65bd3805808573b4af55d623e02f4b31a5"
+      sha256 "654d67b3f0bfd02d9b8c41a860be164520da1c26efa1caf3c8ca0bb636006142"
     end
   end
 
   on_linux do
     on_intel do
       url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-linux-amd64.tar.gz"
-      sha256 "a4e6e883d18618cc1618bdfa1c2258a1eabc94d5e4befae7474bf35b1c067dc4"
+      sha256 "94809038044340f6986b112c708471e6656f7eb16129b86dce7787267122f3e4"
     end
     on_arm do
       url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-linux-arm64.tar.gz"
-      sha256 "f85d38c0f1657ff633386b916d038a972a10a9236355d926721382fe868a26c6"
+      sha256 "9ac6f12ea106b6788d3dbb741b61550b1eb307b57dbe46f9bd79a91a2141996b"
     end
   end
 
