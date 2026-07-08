@@ -37,6 +37,8 @@ class Scion < Formula
 
   def install
     bin.install "scion"
+    libexec.install "scion-plugin-telegram"
+    bin.install_symlink libexec/"scion-plugin-telegram"
   end
 
   def post_install
@@ -70,6 +72,34 @@ class Scion < Formula
 
       To use a different container registry:
         scion init --machine --image-registry ghcr.io/your-org --force
+
+      ── Telegram Integration ──────────────────────────────────────────────
+      The Telegram broker plugin (scion-plugin-telegram) is included.
+      To enable Telegram messaging for your hub:
+
+        1. Create a bot via @BotFather (https://t.me/BotFather).
+        2. Disable bot privacy mode in BotFather so it can read group messages:
+             /mybots → select bot → Bot Settings → Group Privacy → Turn OFF
+           Then remove and re-add the bot to any existing groups.
+        3. Add to your hub's ~/.scion/settings.yaml:
+             server:
+               message_broker:
+                 enabled: true
+                 types: [telegram]
+             plugins:
+               broker:
+                 telegram:
+                   config:
+                     bot_token: "YOUR_BOT_TOKEN"
+                     inbound_mode: poll
+                     db_path: "~/.scion/telegram_v2.db"
+        4. Set the environment variable and restart:
+             export SCION_TELEGRAM_V2=1
+             scion server stop && scion server start
+        5. Add the bot to a Telegram group and mention it to test.
+
+      Full docs: https://github.com/GoogleCloudPlatform/scion/tree/main/extras/scion-telegram
+      ─────────────────────────────────────────────────────────────────────
 
       Documentation: https://github.com/GoogleCloudPlatform/scion
     EOS
