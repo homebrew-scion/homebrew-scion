@@ -40,8 +40,7 @@ class Scion < Formula
   end
 
   def post_install
-    has_runtime = system("which", "docker", out: :close, err: :close) ||
-                  system("which", "podman", out: :close, err: :close)
+    has_runtime = which("docker") || which("podman")
     unless has_runtime
       opoo "No container runtime found. Install Docker Desktop or Podman before running agents.\n" \
            "  Docker:  https://www.docker.com/products/docker-desktop/\n" \
