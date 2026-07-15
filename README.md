@@ -1,6 +1,6 @@
 # Scion — Community Distribution
 
-<img width="1324" height="1218" alt="scion-homebrew" src="https://github.com/user-attachments/assets/56f18a7d-c15c-4c88-916f-1803cafff8a5" />
+<img width="600" alt="scion-homebrew" src="https://github.com/user-attachments/assets/56f18a7d-c15c-4c88-916f-1803cafff8a5" />
 
 Community distribution of [Scion](https://github.com/GoogleCloudPlatform/scion), the multi-agent orchestration platform. This tap provides pre-built CLI binaries via Homebrew and pre-built container images on [ghcr.io](https://ghcr.io/homebrew-scion).
 
