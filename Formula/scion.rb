@@ -1,82 +1,55 @@
+# Generated from the SHA256SUMS of release v0.3.0-preview.5 by
+# scripts/release/update-homebrew-formula.sh in https://github.com/GoogleCloudPlatform/scion.
+# Do not edit by hand: the next release overwrites this file.
 class Scion < Formula
-  desc "Multi-agent orchestration platform with browser-based onboarding wizard"
+  desc "Orchestrate concurrent LLM code agents in containers"
   homepage "https://github.com/GoogleCloudPlatform/scion"
-  version "0.2.21"
+  version "0.3.0-preview.5"
   license "Apache-2.0"
 
   on_macos do
-    on_intel do
-      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-darwin-amd64.tar.gz"
-      sha256 "2b7e47a427b1f695e86f66e829047fea7e7695b97f6583dfbcefdcb5ba1363d6"
-    end
     on_arm do
-      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-darwin-arm64.tar.gz"
-      sha256 "5d3ada24ed626e72cf43eaf54c0fd934c7cbcabb604c07365f8a42c53221ddd0"
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.5/scion-darwin-arm64.tar.gz"
+      sha256 "24296f8ec546bac9d97c9b4cc331b0738a834ba96a7d5aef1b043c74bbaba5e6"
+    end
+    on_intel do
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.5/scion-darwin-amd64.tar.gz"
+      sha256 "9ee065b5177e77dafbc6581b7cbc6bd2239f7727801149d5c8be31b046b747c0"
     end
   end
 
   on_linux do
-    on_intel do
-      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-linux-amd64.tar.gz"
-      sha256 "76da9954cb88a03fa31acefabecd54dc2ace2a63e80e4dfd9b13d2d1788e3466"
-    end
     on_arm do
-      url "https://github.com/homebrew-scion/scion/releases/download/v#{version}/scion-linux-arm64.tar.gz"
-      sha256 "7cc4f908c3d7c7f278b431102c6d6246013bb4cff2a4d222ea0e88d4f470311a"
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.5/scion-linux-arm64.tar.gz"
+      sha256 "dd6ae0a2c0500e02eaa45c304b30c55bba95d0e9128a3d7a9206ddc35a54b643"
     end
-  end
-
-  # Stop any running scion server before install or upgrade so ports are free.
-  def pre_install
-    if (old_bin = HOMEBREW_PREFIX/"bin/scion").exist?
-      system old_bin, "server", "stop", out: :close, err: :close
+    on_intel do
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.5/scion-linux-amd64.tar.gz"
+      sha256 "d319a3c05330eb212b75bb3331df7e5f5bf32fde9ee4ee00e922177f6293e4ac"
     end
-  rescue
-    nil
   end
 
   def install
     bin.install "scion"
-    libexec.install "scion-plugin-telegram"
-    bin.install_symlink libexec/"scion-plugin-telegram"
-  end
-
-  def post_install
-    has_runtime = which("docker") || which("podman")
-    unless has_runtime
-      opoo "No container runtime found. Install Docker Desktop or Podman before running agents.\n" \
-           "  Docker:  https://www.docker.com/products/docker-desktop/\n" \
-           "  Podman:  https://podman.io/"
-    end
-
-    # Pre-detect runtime and write settings.yaml. This prevents apple-container from
-    # being auto-detected at server startup (which causes a crash on macOS due to
-    # authorization requirements). The onboarding wizard still runs via the SPA's
-    # client-side status check.
-    unless system bin/"scion", "init", "--machine", "--non-interactive",
-                              "--image-registry", "ghcr.io/homebrew-scion"
-      opoo "scion init --machine failed. Run manually:\n" \
-           "  scion init --machine --non-interactive --image-registry ghcr.io/homebrew-scion"
-    end
   end
 
   def caveats
     <<~EOS
-      Scion has been installed. To get started, run:
-
+      To set up Scion, start the workstation server:
         scion server start
+      On first start it opens the onboarding wizard, which checks your
+      container runtime and sets the image registry.
 
-      This starts the hub and opens the browser to the onboarding wizard,
-      which guides you through runtime setup, harness selection, image pulling,
-      and creating your first workspace.
+      If a server was already running, restart it to use the new binary:
+        scion server restart
 
-      To use a different container registry:
-        scion init --machine --image-registry ghcr.io/your-org --force
-
-      Telegram integration (scion-plugin-telegram) is included and configurable
-      from the hub admin UI at http://127.0.0.1:8080/admin/integrations.
-
-      Documentation: https://github.com/GoogleCloudPlatform/scion
+      Container images for this release are published with the release tag,
+      for example:
+        ghcr.io/homebrew-scion/scion-claude:v0.3.0-preview.5
+      Until Scion resolves images by release tag, it pulls :latest, which in
+      ghcr.io/homebrew-scion is an old v0.2 image (newer harnesses have
+      none). To match this version, build the images locally or set
+      image_registry to a registry with current images.
     EOS
   end
 
