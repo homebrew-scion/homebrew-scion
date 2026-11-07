@@ -1,31 +1,31 @@
-# Generated from the SHA256SUMS of release v0.3.0-preview.6 by
+# Generated from the SHA256SUMS of release v0.3.0-preview.7 by
 # scripts/release/update-homebrew-formula.sh in https://github.com/GoogleCloudPlatform/scion.
 # Do not edit by hand: the next release overwrites this file.
 class Scion < Formula
   desc "Orchestrate concurrent LLM code agents in containers"
   homepage "https://github.com/GoogleCloudPlatform/scion"
-  version "0.3.0-preview.6"
+  version "0.3.0-preview.7"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.6/scion-darwin-arm64.tar.gz"
-      sha256 "a55363655b101d5b09567537f03e9a6195a1c32b77aae71601ca26506dc5fe9b"
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.7/scion-darwin-arm64.tar.gz"
+      sha256 "aca94a7f83e309e954277ec084beb0f91f01a9944ed260c8e1ea5677c9480780"
     end
     on_intel do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.6/scion-darwin-amd64.tar.gz"
-      sha256 "d9b8c240a891611c178cd9f762524bbc3f09f4741ff8d8dbeeb69a77c1b34824"
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.7/scion-darwin-amd64.tar.gz"
+      sha256 "81fae8f72c0070d053af79205ee8e13abed37590aaefc87ac5204706aa441cad"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.6/scion-linux-arm64.tar.gz"
-      sha256 "d324685c31716cfd4e204c03e848d1a5f96fbb7f54863bafe8c9124a68a3b8e7"
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.7/scion-linux-arm64.tar.gz"
+      sha256 "09b0bc16d8eae1e435c8947a9fb31ad9df26c4f876fd92e899723fa83f0754a9"
     end
     on_intel do
-      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.6/scion-linux-amd64.tar.gz"
-      sha256 "2ef0ab1530b7341e1170ac58bcd58656233bc9f2382e63f52f9fed37429f2d9d"
+      url "https://github.com/GoogleCloudPlatform/scion/releases/download/v0.3.0-preview.7/scion-linux-amd64.tar.gz"
+      sha256 "3d660e5f53d9130a79daa6eec129f994a148e38c7c23040936e45ed38c15c40d"
     end
   end
 
@@ -45,7 +45,7 @@ class Scion < Formula
 
       Container images for this release are published with the release tag,
       for example:
-        ghcr.io/homebrew-scion/scion-claude:v0.3.0-preview.6
+        ghcr.io/homebrew-scion/scion-claude:v0.3.0-preview.7
       Until Scion resolves images by release tag, it pulls :latest, which in
       ghcr.io/homebrew-scion is an old v0.2 image (newer harnesses have
       none). To match this version, build the images locally or set
@@ -59,7 +59,7 @@ class Scion < Formula
         6.0.33, and its own glibc as well when glibc is older than 2.39.
         Scion is a static binary and does not use them.
         On such hosts you can install the release tarball instead:
-          https://github.com/GoogleCloudPlatform/scion/releases/tag/v0.3.0-preview.6
+          https://github.com/GoogleCloudPlatform/scion/releases/tag/v0.3.0-preview.7
       EOS
     end
     text
